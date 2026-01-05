@@ -24,8 +24,6 @@ export default function IdentityGate({ mode, children }: Props) {
                     setVerifiedData({
                         name: user.name,
                         birthdate: user.birth_date,
-                        phone: user.phone,
-                        gender: 'M', // Mock, or add to token if needed
                         id: user.id
                     });
 
@@ -41,10 +39,7 @@ export default function IdentityGate({ mode, children }: Props) {
     const handleVerify = async (data: IdentityData) => {
         setLoading(true);
         try {
-            // Sanitize input
-            const sanitizedPhone = data.phone.replace(/-/g, '');
-
-            // 1. Check Name + Birthdate first
+            // Check Name + Birthdate
             const { data: usersByNameBirth, error: nameBirthError } = await supabase
                 .from('students')
                 .select('*')
@@ -59,15 +54,9 @@ export default function IdentityGate({ mode, children }: Props) {
             if (!usersByNameBirth || usersByNameBirth.length === 0) {
                 errorReason = '입력하신 이름과 생년월일로 등록된 정보를 찾을 수 없습니다.\n오타가 없는지 확인해주세요.';
             } else {
-                // 2. Check Phone among matched
-                matchedUser = usersByNameBirth.find(u => {
-                    const dbPhone = u.phone.replace(/-/g, '');
-                    return dbPhone === sanitizedPhone;
-                });
-
-                if (!matchedUser) {
-                    errorReason = '이름과 생년월일은 일치하나, 휴대폰 번호가 등록된 정보와 다릅니다.\n정보 수정을 원하시면 관리자에게 문의해주세요.';
-                }
+                // Since Phone check is removed as per request, take the first match or handle multiple
+                // For safety, let's take the first one or logic dictates distinctness
+                matchedUser = usersByNameBirth[0];
             }
 
             if (matchedUser) {

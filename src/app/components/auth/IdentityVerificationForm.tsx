@@ -4,8 +4,6 @@ import { useForm } from 'react-hook-form';
 export interface IdentityData {
     name: string;
     birthdate: string; // YYYY-MM-DD
-    phone: string;
-    gender: 'male' | 'female';
 }
 
 interface Props {
@@ -47,34 +45,6 @@ export default function IdentityVerificationForm({ onSubmit, title = "본인 인
                         className="w-full border border-gray-300 rounded px-3 py-2"
                     />
                     {errors.birthdate && <p className="text-red-500 text-xs mt-1">{errors.birthdate.message}</p>}
-                </div>
-
-                {/* Phone */}
-                <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-1">휴대폰번호</label>
-                    <input
-                        {...register('phone', { required: '전화번호를 입력해주세요' })}
-                        type="text"
-                        className="w-full border border-gray-300 rounded px-3 py-2"
-                        placeholder="010-0000-0000"
-                    />
-                    {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone.message}</p>}
-                </div>
-
-                {/* Gender */}
-                <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-1">성별</label>
-                    <div className="flex gap-4 mt-2">
-                        <label className="flex items-center gap-2 cursor-pointer">
-                            <input {...register('gender', { required: '성별을 선택해주세요' })} type="radio" value="male" className="accent-blue-500" />
-                            남성
-                        </label>
-                        <label className="flex items-center gap-2 cursor-pointer">
-                            <input {...register('gender', { required: '성별을 선택해주세요' })} type="radio" value="female" className="accent-blue-500" />
-                            여성
-                        </label>
-                    </div>
-                    {errors.gender && <p className="text-red-500 text-xs mt-1">{errors.gender.message}</p>}
                 </div>
 
                 <button
